@@ -40,6 +40,10 @@ RUN mkdir -p .mf && \
     chown -R worker:nodejs /app && \
     chown -R worker:nodejs /home/worker
 
+# 写启动脚本
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
 # Switch to non-root user for security
 USER worker
 
@@ -55,4 +59,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 # --port 8787 matches the EXPOSE and wrangler.toml [dev] port
 # --local disables proxying to Cloudflare's network, keeping everything local
 # --persist-to tells miniflare to use the specified path for local storage
-CMD ["wrangler", "dev", "--host", "0.0.0.0", "--port", "8787", "--local", "--persist-to", ".mf"]
+#CMD ["wrangler", "dev", "--host", "0.0.0.0", "--port", "8787", "--local", "--persist-to", ".mf"]
+CMD ["/start.sh"]
